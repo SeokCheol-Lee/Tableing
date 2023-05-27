@@ -1,7 +1,6 @@
 package com.example.tableing.controller;
 
 import com.example.tableing.model.Store;
-import com.example.tableing.repository.ManagerRepository;
 import com.example.tableing.service.ManagerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
