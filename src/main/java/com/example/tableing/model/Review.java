@@ -17,17 +17,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Builder
-public class Reserve {
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username;
     private String storename;
-    private Boolean arrived;
-    private LocalDateTime reservedAt;
-    private String status;
+    private String context;
     @CreatedDate
     private LocalDateTime createdAt;
-
 }
