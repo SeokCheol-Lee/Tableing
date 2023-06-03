@@ -30,9 +30,11 @@ public class SecurityConfiguration{
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((authorizeRequest) ->
-                        authorizeRequest.requestMatchers("/**/signin","/**/signup").authenticated().anyRequest().permitAll())
-                .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
+                        .requestMatchers("/**/signin", "/**/signup").permitAll()
+                        .anyRequest().authenticated()
+                );
         return http.build();
     }
 

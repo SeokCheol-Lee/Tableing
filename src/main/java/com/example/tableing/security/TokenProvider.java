@@ -36,7 +36,7 @@ public class TokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expiredDate)
-                .signWith(SignatureAlgorithm.ES512, this.secretKey)
+                .signWith(SignatureAlgorithm.HS256, this.secretKey)
                 .compact();
     }
     public Authentication getAuthentication(String jwt){
