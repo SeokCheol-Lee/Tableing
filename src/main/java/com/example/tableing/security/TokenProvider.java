@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -41,7 +42,8 @@ public class TokenProvider {
     }
     public Authentication getAuthentication(String jwt){
         UserDetails userDetails = this.memberService.loadUserByUsername(this.getUsername(jwt));
-        return new UsernamePasswordAuthenticationToken(userDetails, "",userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(
+                userDetails, "",userDetails.getAuthorities());
     }
 
     public String getUsername(String token){

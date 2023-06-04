@@ -1,5 +1,6 @@
 package com.example.tableing.service;
 
+import com.example.tableing.model.Req;
 import com.example.tableing.model.Reserve;
 import com.example.tableing.model.Review;
 import com.example.tableing.model.Store;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -20,17 +23,14 @@ public class UserService {
     private final ReserveRepository reserveRepository;
     private final ReviewRepository reviewRepository;
 
-    public Store search(String storename){
-        boolean exists = this.shopRepository.existsByStorename(storename);
-        if(!exists){
-            throw new RuntimeException("존재하지 않는 매장입니다.");
-        }
-        Store result = this.shopRepository.findAllByStorename(storename);
-        return result;
+    public List<Store> search(){
+        List<Store> list = shopRepository.findAll();
+        log.info(list.toString());
+        return list;
     }
 
-    public Reserve reserve(Reserve reserve){
-        Reserve result = this.reserveRepository.save(reserve);
+    public Reserve reserve(Req.reserve reserve){
+        Reserve result = this.reserveRepository.save(reserve.toEntity());
         return result;
     }
 
@@ -52,8 +52,8 @@ public class UserService {
         return save;
     }
 
-    public Review createReview(Review review){
-        Review save = reviewRepository.save(review);
+    public Review createReview(Req.review review){
+        Review save = reviewRepository.save(review.toEntity());
         return save;
     }
 }

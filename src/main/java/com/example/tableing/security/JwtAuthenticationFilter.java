@@ -11,26 +11,27 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public static final String TOKEN_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
-    private TokenProvider tokenProvider;
+
+    private final TokenProvider tokenProvider;
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = this.resolveTokenFromRequest(request);
-        // 토큰이 null 이면 다음 필터로 넘어간다.
-        if (token == null) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        if(StringUtils.hasText(token) && this.tokenProvider.validateToken(token)){
-            Authentication auth = this.tokenProvider.getAuthentication(token);
+
+        if(StringUtils.hasText(token) && tokenProvider.validateToken(token)){
+            Authentication auth = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
 
             log.info(String.format("[%s] -> %s", this.tokenProvider.getUsername(token), request.getRequestURI()));

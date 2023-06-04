@@ -1,5 +1,6 @@
 package com.example.tableing.controller;
 
+import com.example.tableing.model.Req;
 import com.example.tableing.model.Reserve;
 import com.example.tableing.model.Store;
 import com.example.tableing.service.ManagerService;
@@ -21,8 +22,9 @@ public class ManagerController {
 
     @PostMapping("/regist-store")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<?> addShop(@RequestBody Store request){
-        Store store = this.managerService.regist(request);
+    public ResponseEntity<?> addShop(@RequestBody Req.registStore registStore){
+        log.info(registStore.toString());
+        Store store = this.managerService.regist(registStore);
         return ResponseEntity.ok(store);
     }
 
@@ -36,8 +38,8 @@ public class ManagerController {
     @PutMapping("/allow-reserve")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> allowReserve(
-            @RequestBody Long id, String status){
-        Reserve reserve = this.managerService.allowReserve(id, status);
+            @RequestBody Req.allowReserve request){
+        Reserve reserve = this.managerService.allowReserve(request);
         return ResponseEntity.ok(reserve);
     }
 }

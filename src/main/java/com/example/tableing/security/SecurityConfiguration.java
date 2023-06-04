@@ -35,6 +35,8 @@ public class SecurityConfiguration{
                         .requestMatchers("/**/signin", "/**/signup").permitAll()
                         .anyRequest().authenticated()
                 );
+
+
         return http.build();
     }
 

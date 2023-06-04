@@ -1,5 +1,6 @@
 package com.example.tableing.controller;
 
+import com.example.tableing.model.Req;
 import com.example.tableing.model.Reserve;
 import com.example.tableing.model.Review;
 import com.example.tableing.model.Store;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @RequestMapping("/user")
@@ -20,31 +22,24 @@ import java.time.LocalDateTime;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/search-store")
+    @GetMapping("/search-store")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> searchStore(@RequestBody String storename){
-        Store store = userService.search(storename);
+    public ResponseEntity<?> searchStore(){
+        List<Store> store = userService.search();
         return ResponseEntity.ok(store);
     }
 
     @PostMapping("/reserve")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> reserveStore(
-            @RequestBody String username, String storename, LocalDateTime reservedAt){
-        Reserve reserve = Reserve.builder()
-                .username(username)
-                .storename(storename)
-                .arrived(false)
-                .status("create")
-                .reservedAt(reservedAt)
-                .build();
+            @RequestBody Req.reserve reserve){
         Reserve result = userService.reserve(reserve);
         return ResponseEntity.ok(result);
     }
 
     @PutMapping("/arrive")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> notifyArrive(@RequestBody String username){
+    public ResponseEntity<?> notifyArrive(@RequestParam String username){
         Reserve notify = userService.notify(username);
         return ResponseEntity.ok(notify);
     }
@@ -52,13 +47,7 @@ public class UserController {
     @PostMapping("/review")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> createReview(
-            @RequestBody String username,String storename,
-            String context){
-        Review review = Review.builder()
-                .username(username)
-                .storename(storename)
-                .context(context)
-                .build();
+            @RequestBody Req.review review){
         Review serviceReview = userService.createReview(review);
         return ResponseEntity.ok(serviceReview);
     }

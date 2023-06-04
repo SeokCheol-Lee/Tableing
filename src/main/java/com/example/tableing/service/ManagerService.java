@@ -1,5 +1,6 @@
 package com.example.tableing.service;
 
+import com.example.tableing.model.Req;
 import com.example.tableing.model.Reserve;
 import com.example.tableing.model.Store;
 import com.example.tableing.repository.ReserveRepository;
@@ -18,12 +19,13 @@ public class ManagerService {
     private final ShopRepository shopRepository;
     private final ReserveRepository reserveRepository;
 
-    public Store regist(Store store){
-        boolean exists = this.shopRepository.existsByStorename(store.getStorename());
+    public Store regist(Req.registStore req){
+        boolean exists = this.shopRepository.existsByStorename(req.getStorename());
         if(exists){
             throw new RuntimeException("이미 존재하는 매장입니다.");
         }
-        Store result = this.shopRepository.save(store);
+        log.info(req.toString());
+        Store result = shopRepository.save(req.toEntity());
         return result;
     }
 
@@ -32,15 +34,15 @@ public class ManagerService {
         return reserveList;
     }
 
-    public Reserve allowReserve(Long id, String status){
-        Reserve reserve = reserveRepository.findAllById(id);
+    public Reserve allowReserve(Req.allowReserve request){
+        Reserve reserve = reserveRepository.findAllById(request.getId());
         Reserve build = Reserve.builder()
-                .id(id)
+                .id(request.getId())
                 .username(reserve.getUsername())
                 .storename(reserve.getStorename())
                 .arrived(reserve.getArrived())
                 .reservedAt(reserve.getReservedAt())
-                .status(reserve.getStatus())
+                .status(request.getStatus())
                 .createdAt(reserve.getCreatedAt())
                 .build();
         Reserve save = this.reserveRepository.save(build);

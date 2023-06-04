@@ -1,22 +1,17 @@
 package com.example.tableing.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Builder
+@Entity(name = "STORE")
+@EntityListeners(AuditingEntityListener.class)
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +21,12 @@ public class Store {
     private String storelocation;
     private String storedetail;
     @CreatedDate
-    private LocalDateTime createdAt;
+    private LocalDateTime createdat;
+
+    @Builder
+    public Store(String storename, String storelocation, String storedetail){
+        this.storename = storename;
+        this.storelocation = storelocation;
+        this.storedetail = storedetail;
+    }
 }
