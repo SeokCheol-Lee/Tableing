@@ -21,12 +21,20 @@ public class AuthController {
     private final MemberService memberService;
     private final TokenProvider tokenProvider;
 
+    //회원가입
+    /*
+    username, password, role을 받습니다.
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody Auth.SignUp request){
         Member result = this.memberService.register(request);
         return ResponseEntity.ok(result);
     }
 
+    //로그인
+    /*
+    username과 password를 입력받습니다.
+     */
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody Auth.SignIn request){
         Member mem = this.memberService.authenticate(request);
